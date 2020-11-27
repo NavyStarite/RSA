@@ -333,7 +333,13 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_DES1ActionPerformed
     
     private void DES2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DES2ActionPerformed
-        BigInteger[] mensaje = new BigInteger[3];/*Aqui va el objeto sacado del serializable de mensaje*/
+        String message = txtcifrado.getText();
+        String[] lista = message.split("\\r?\\n");
+        BigInteger[] mensaje = new BigInteger[lista.length];
+        for (int i = 0; i < lista.length; i++) {
+            mensaje[i] = new BigInteger(lista[i]);
+        }
+        /*Aqui va el objeto sacado del serializable de mensaje*/
         String Descifrado = "";
         if( mensaje == null || mensaje.length==0 ){
             JOptionPane.showMessageDialog(null, "Suba un documento");
