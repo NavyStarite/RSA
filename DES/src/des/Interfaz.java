@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
@@ -30,8 +31,7 @@ public class Interfaz extends javax.swing.JFrame {
     File archivo;
     FileInputStream entrada;
     FileOutputStream salida;
-    AES aes = new AES();
-    DES des = new DES();
+    CifrarRSA rsa = new CifrarRSA(32);
 
     public Interfaz() {
         initComponents();
@@ -95,6 +95,7 @@ public class Interfaz extends javax.swing.JFrame {
         selecdoc2 = new javax.swing.JButton();
         selecdoc = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -178,12 +179,21 @@ public class Interfaz extends javax.swing.JFrame {
 
         jLabel1.setText("Cifrado RSA");
 
+        jButton1.setText("Generar Claves");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 197, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addGap(154, 154, 154))
             .addGroup(layout.createSequentialGroup()
@@ -223,8 +233,10 @@ public class Interfaz extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -302,47 +314,38 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void DES1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DES1ActionPerformed
         String mensaje = txtarea.getText();
-        String Cifrado = "";
+        BigInteger[] Cifrado;
         if (mensaje == "" || mensaje == null || mensaje == " " || mensaje.length()==0 ) {
             JOptionPane.showMessageDialog(null, "Suba un documento");
         } else {
             try {
-                Cifrado = des.Cifrado(mensaje);
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchPaddingException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvalidKeyException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalBlockSizeException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (BadPaddingException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+                Cifrado = rsa.encriptar(mensaje);
+                String Cipher = "";
+                for (int i = 0; i < Cifrado.length; i++) {
+                    Cipher = (Cipher)+(Cifrado.toString())+"\n";
+                }
+                txtcifrado.setText(Cipher);
+            } catch (Exception e) {
+                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, e);
             }
-            txtcifrado.setText(Cifrado);
+            
          }   
     }//GEN-LAST:event_DES1ActionPerformed
     
     private void DES2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DES2ActionPerformed
-        String mensaje = txtarea.getText();
+        BigInteger[] mensaje = new BigInteger[3];/*Aqui va el objeto sacado del serializable de mensaje*/
         String Descifrado = "";
-        if(mensaje == "" || mensaje == null || mensaje == " " || mensaje.length()==0 ){
+        if( mensaje == null || mensaje.length==0 ){
             JOptionPane.showMessageDialog(null, "Suba un documento");
-        }else{
+        }
+        else{
             try {
-                Descifrado=des.Descifrado(mensaje);
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchPaddingException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvalidKeyException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalBlockSizeException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (BadPaddingException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+                
+                Descifrado = rsa.desencriptar(mensaje);
+                rsa.importarE(BigInteger.ONE/*Aqui va el objeto sacado del serializable de llave publica (e)*/);
+                rsa.importarN(BigInteger.ONE/*Aqui va el objeto sacado del serializable de llave publica (n)*/);
+            } catch (Exception e) {
+                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, e);
             }
            txtcifrado.setText(Descifrado); 
         }
@@ -406,6 +409,23 @@ public class Interfaz extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_selecdoc2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        try{
+            int tamaño = Integer.parseInt(clave.getText());
+            if (tamaño>999 || tamaño<1) {
+                JOptionPane.showMessageDialog(this, "El tamaño de la clave no puede estar em blanco, ser menor a uno o ser muy grande.");
+            }
+            else{
+                rsa.generarClavesBoton(SOMEBITS);
+            }
+            rsa.generarClavesBoton(SOMEBITS);
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Introduce un numero en la clave");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
     
 
     /**
@@ -452,6 +472,7 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JTextField clave;
     private javax.swing.JTextArea clave2;
     private javax.swing.JButton guardardoc2;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

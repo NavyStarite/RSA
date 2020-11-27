@@ -22,7 +22,7 @@ import sun.misc.BASE64Encoder;
 import sun.misc.BASE64Decoder;
 
 public class AES {
-
+/*
     public byte[] stringToBytes(String s) {
         byte[] b2 = new BigInteger(s, 36).toByteArray();
         return Arrays.copyOfRange(b2, 1, b2.length);
@@ -55,9 +55,9 @@ public class AES {
     public String textocifrado;
 
     public String Cifrado(String mensaje, String clave) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        /*//Inserte codigo rsa
+        /*Inserte codigo rsa
         
-         */
+         *-/
         textocifrado = mensaje;
         return textocifrado;
 
@@ -70,5 +70,4 @@ public class AES {
         textodescifrado = msjcifrado;
         return textodescifrado;
     }
-
-}
+*/}
