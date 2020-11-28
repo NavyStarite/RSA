@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import static java.lang.Integer.parseInt;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -96,6 +97,8 @@ public class Interfaz extends javax.swing.JFrame {
         selecdoc = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        claveE = new javax.swing.JTextField();
+        claveN = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -186,16 +189,19 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
+        claveE.setText("ClaveE");
+        claveE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                claveEActionPerformed(evt);
+            }
+        });
+
+        claveN.setText("ClaveN");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
-                .addComponent(jLabel6)
-                .addGap(154, 154, 154))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -212,7 +218,12 @@ public class Interfaz extends javax.swing.JFrame {
                                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(DES2, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(DES1, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(DES1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(claveE, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(claveN, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnabrir)
@@ -222,7 +233,9 @@ public class Interfaz extends javax.swing.JFrame {
                                     .addComponent(selecdoc2)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(8, 8, 8)
-                                        .addComponent(selecdoc))))))
+                                        .addComponent(selecdoc))))
+                            .addComponent(jButton1)
+                            .addComponent(jLabel6)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(253, 253, 253)
                         .addComponent(jLabel1)))
@@ -230,13 +243,12 @@ public class Interfaz extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jButton1))
+                .addGap(16, 16, 16)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -253,7 +265,10 @@ public class Interfaz extends javax.swing.JFrame {
                     .addComponent(clave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(selecdoc))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(DES1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(DES1)
+                    .addComponent(claveE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(claveN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(8, 8, 8)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -274,7 +289,7 @@ public class Interfaz extends javax.swing.JFrame {
                         .addComponent(selecdoc2)))
                 .addGap(18, 18, 18)
                 .addComponent(DES2)
-                .addGap(25, 25, 25))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -314,17 +329,27 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void DES1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DES1ActionPerformed
         String mensaje = txtarea.getText();
+        
+        String clavee =  rsa.dameE().toString();
+        String claven =  rsa.dameN().toString();
         BigInteger[] Cifrado;
         if (mensaje == "" || mensaje == null || mensaje == " " || mensaje.length()==0 ) {
             JOptionPane.showMessageDialog(null, "Suba un documento");
         } else {
             try {
+                
                 Cifrado = rsa.encriptar(mensaje);
                 String Cipher = "";
                 for (int i = 0; i < Cifrado.length; i++) {
-                    Cipher = (Cipher)+(Cifrado.toString())+"\n";
+                    Cipher = (Cipher)+(Cifrado[i].toString())+"\n";
                 }
                 txtcifrado.setText(Cipher);
+                rsa.generarClavesBoton(SOMEBITS);
+                /*char leer[] = txtcifrado.getText().replaceAll("\n", "").toCharArray();
+                System.out.println(leer);*/
+                txtcifrado.setText(Cipher);
+                claveE.setText(clavee);
+                claveN.setText(claven);
             } catch (Exception e) {
                 Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, e);
             }
@@ -341,6 +366,11 @@ public class Interfaz extends javax.swing.JFrame {
         }
         /*Aqui va el objeto sacado del serializable de mensaje*/
         String Descifrado = "";
+       
+        rsa.importarE(new BigInteger(claveE.getText()));//importarE=BigInteger(claveE.getText())
+        rsa.importarN(new BigInteger(claveN.getText()));//importarN=BigInteger(claveN.getText());
+        //String clavee=rsa.importarE(BigInteger.ONE);
+        //String claven=rsa.importarN(BigInteger.ONE);
         if( mensaje == null || mensaje.length==0 ){
             JOptionPane.showMessageDialog(null, "Suba un documento");
         }
@@ -432,6 +462,10 @@ public class Interfaz extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Introduce un numero en la clave");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void claveEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_claveEActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_claveEActionPerformed
     
 
     /**
@@ -477,6 +511,8 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton btnguardar;
     private javax.swing.JTextField clave;
     private javax.swing.JTextArea clave2;
+    private javax.swing.JTextField claveE;
+    private javax.swing.JTextField claveN;
     private javax.swing.JButton guardardoc2;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
