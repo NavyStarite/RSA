@@ -91,12 +91,8 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        clave2 = new javax.swing.JTextArea();
         abrirdoc2 = new javax.swing.JButton();
         guardardoc2 = new javax.swing.JButton();
-        selecdoc2 = new javax.swing.JButton();
         selecdoc = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -151,12 +147,6 @@ public class Interfaz extends javax.swing.JFrame {
 
         jLabel8.setText("Texto cifrado");
 
-        jLabel9.setText("Clave");
-
-        clave2.setColumns(20);
-        clave2.setRows(5);
-        jScrollPane3.setViewportView(clave2);
-
         abrirdoc2.setText("Abrir Doc");
         abrirdoc2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,13 +161,6 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
-        selecdoc2.setText("Seleccionar archivo");
-        selecdoc2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selecdoc2ActionPerformed(evt);
-            }
-        });
-
         selecdoc.setText("Seleccionar archivo");
         selecdoc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -185,6 +168,7 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("Cifrado RSA");
 
         jButton1.setText("Generar Claves");
@@ -223,8 +207,6 @@ public class Interfaz extends javax.swing.JFrame {
                                     .addComponent(clave, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE)
                                     .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(DES2, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -243,22 +225,22 @@ public class Interfaz extends javax.swing.JFrame {
                                     .addComponent(btnguardar)
                                     .addComponent(abrirdoc2)
                                     .addComponent(guardardoc2)
-                                    .addComponent(selecdoc2)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(8, 8, 8)
                                         .addComponent(selecdoc))))
                             .addComponent(jButton1)
                             .addComponent(jLabel6)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(253, 253, 253)
+                        .addGap(204, 204, 204)
                         .addComponent(jLabel1)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(16, 16, 16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
@@ -293,16 +275,7 @@ public class Interfaz extends javax.swing.JFrame {
                         .addComponent(abrirdoc2)
                         .addGap(15, 15, 15)
                         .addComponent(guardardoc2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(selecdoc2)))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(DES2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -465,20 +438,6 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_guardardoc2ActionPerformed
 
-    private void selecdoc2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selecdoc2ActionPerformed
-        if (seleccionar.showDialog(null, "Abrir") == JFileChooser.APPROVE_OPTION) {
-            archivo = seleccionar.getSelectedFile();
-            if (archivo.canRead()) {
-                if (archivo.getName().endsWith("txt")) {
-                    String documento = AbrirArchivo(archivo);
-                    clave2.setText(documento);//imprime el txt en el textarea
-                } else {
-                    JOptionPane.showMessageDialog(null, "Archivo No Compatible");
-                }
-            }
-        }
-    }//GEN-LAST:event_selecdoc2ActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         try{
@@ -557,7 +516,6 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton btnabrir;
     private javax.swing.JButton btnguardar;
     private javax.swing.JTextField clave;
-    private javax.swing.JTextArea clave2;
     private javax.swing.JTextField claveE;
     private javax.swing.JTextField claveN;
     private javax.swing.JButton guardardoc2;
@@ -569,12 +527,9 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JButton selecdoc;
-    private javax.swing.JButton selecdoc2;
     private javax.swing.JTextArea txtarea;
     private javax.swing.JTextArea txtcifrado;
     // End of variables declaration//GEN-END:variables
