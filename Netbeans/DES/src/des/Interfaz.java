@@ -102,6 +102,7 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel11t = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         btnabrir.setText("Abrir Doc");
         btnabrir.addActionListener(new java.awt.event.ActionListener() {
