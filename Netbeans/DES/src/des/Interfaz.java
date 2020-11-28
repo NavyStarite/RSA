@@ -426,7 +426,7 @@ public class Interfaz extends javax.swing.JFrame {
         if (seleccionar.showDialog(null, "Guardar") == JFileChooser.APPROVE_OPTION) {
             archivo = seleccionar.getSelectedFile();
             if (archivo.getName().endsWith("txt")) {
-                String Documento = txtarea.getText();
+                String Documento = txtcifrado.getText();
                 String mensaje = GuardarArchivo(archivo, Documento);
                 if (mensaje != null) {
                     JOptionPane.showMessageDialog(null, mensaje);
