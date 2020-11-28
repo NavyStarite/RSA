@@ -15,6 +15,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.*;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -36,6 +37,8 @@ public class Interfaz extends javax.swing.JFrame {
 
     public Interfaz() {
         initComponents();
+        rsa.generarPrimos();
+        rsa.generarClaves();
     }
 
     public String AbrirArchivo(File archivo) {
@@ -99,6 +102,8 @@ public class Interfaz extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         claveE = new javax.swing.JTextField();
         claveN = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11t = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -189,14 +194,18 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
-        claveE.setText("ClaveE");
+        claveE.setText("0");
         claveE.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 claveEActionPerformed(evt);
             }
         });
 
-        claveN.setText("ClaveN");
+        claveN.setText("0");
+
+        jLabel10.setText("E");
+
+        jLabel11t.setText("N");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -220,9 +229,13 @@ public class Interfaz extends javax.swing.JFrame {
                                     .addComponent(DES2, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addComponent(DES1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(claveE, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(jLabel11t, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(claveN, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,7 +281,9 @@ public class Interfaz extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(DES1)
                     .addComponent(claveE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(claveN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(claveN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11t))
                 .addGap(8, 8, 8)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -329,7 +344,11 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void DES1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DES1ActionPerformed
         String mensaje = txtarea.getText();
-        
+        String regex = "[0-9]+";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(clave.getText());
+        if(!mensaje.equals("") && m.matches()) {
+            jLabel8.setText("Texto Cifrado");
         String clavee =  rsa.dameE().toString();
         String claven =  rsa.dameN().toString();
         BigInteger[] Cifrado;
@@ -343,6 +362,7 @@ public class Interfaz extends javax.swing.JFrame {
                 for (int i = 0; i < Cifrado.length; i++) {
                     Cipher = (Cipher)+(Cifrado[i].toString())+"\n";
                 }
+                Cipher.trim();
                 txtcifrado.setText(Cipher);
                 rsa.generarClavesBoton(SOMEBITS);
                 /*char leer[] = txtcifrado.getText().replaceAll("\n", "").toCharArray();
@@ -354,10 +374,23 @@ public class Interfaz extends javax.swing.JFrame {
                 Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, e);
             }
             
-         }   
+         }
+           }
+        else{
+            if(mensaje.equals("")) {
+            txtarea.requestFocusInWindow();
+            JOptionPane.showMessageDialog(null, "Porfavor escriba su mensaje y no deje el campo vacio.");
+            }
+            if(!m.matches()) {
+            clave.requestFocusInWindow();
+            JOptionPane.showMessageDialog(null, "Porfavor escriba numeros enteros en el tamaño de la clave.");
+            }
+        }
+           
     }//GEN-LAST:event_DES1ActionPerformed
     
     private void DES2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DES2ActionPerformed
+        jLabel8.setText("Texto Descifrado");
         String message = txtcifrado.getText();
         String[] lista = message.split("\\r?\\n");
         BigInteger[] mensaje = new BigInteger[lista.length];
@@ -449,17 +482,31 @@ public class Interfaz extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         try{
-            int tamaño = Integer.parseInt(clave.getText());
-            if (tamaño>999 || tamaño<1) {
-                JOptionPane.showMessageDialog(this, "El tamaño de la clave no puede estar em blanco, ser menor a uno o ser muy grande.");
+            int tamaño=0;
+           // String regex = "[0-9]+";
+           // Pattern p = Pattern.compile(regex);
+           // Matcher m = p.matcher(clave.getText());
+            //if (m.matches()) {
+                tamaño = Integer.parseInt(clave.getText());
+                if (tamaño>999 || tamaño<1) {
+                    JOptionPane.showMessageDialog(this, "El tamaño de la clave no puede estar en blanco, ser menor a uno o ser muy grande.");
+                    clave.requestFocusInWindow();
+                }
+                else{
+                    rsa.generarClavesBoton(tamaño);
+                }
             }
-            else{
-                rsa.generarClavesBoton(SOMEBITS);
-            }
-            rsa.generarClavesBoton(SOMEBITS);
-        }
+           // else{
+           // JOptionPane.showMessageDialog(this, "Introduce un numero entero en el tamaño clave");
+            //clave.requestFocusInWindow();
+            
+            //}
+            
+            
+        //}
         catch(Exception e){
-            JOptionPane.showMessageDialog(this, "Introduce un numero en la clave");
+            JOptionPane.showMessageDialog(this, "Introduce un numero entero en el tamaño clave");
+            clave.requestFocusInWindow();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -516,6 +563,8 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton guardardoc2;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11t;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
